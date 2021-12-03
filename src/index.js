@@ -41,7 +41,9 @@ class CarGameLogic {
 
   makeTemplatePerSimulate() {
     let template = PLAIN_STRING;
-
+    this.cars.forEach((car) => {
+      template = `${template}${car.name}: ${car.countTemplate}<br>`;
+    });
     return template;
   }
 
@@ -58,8 +60,7 @@ class CarGameLogic {
     let template = PLAIN_STRING;
     for (let i = 0; i < number; i++) {
       this.simulatePerNumberOfTimes();
-      // simulate 이후 자동차를 기준으로 템플릿을 만들어 변수에 합친다.
-      template = `${template}${this.makeTemplatePerSimulate()}`;
+      template = `${template}${this.makeTemplatePerSimulate()}<br>`;
     }
     return template;
   }

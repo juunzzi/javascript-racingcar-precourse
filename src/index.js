@@ -15,6 +15,12 @@ class Car {
     this.countTemplate = PLAIN_STRING;
     this.count = 0;
   }
+  setCountTemplatePlusOne() {
+    this.countTemplate = `${this.countTemplate}${MINUS_SIGN}`;
+  }
+  setCountPlusOne() {
+    this.count = this.count + 1;
+  }
 }
 class CarGameUtil {
   static makeCars(namesArray) {
@@ -26,16 +32,48 @@ class CarGameUtil {
   static isValidate(namesArray) {
     return isEveryStringLessOrEqualsFive(namesArray);
   }
+  static isForward() {
+    return getRandomNumber() >= FORWARD_NUMBER_SIGN;
+  }
 }
+class CarGameLogic {
+  constructor() {}
 
-class CarGame {
+  makeTemplatePerSimulate() {
+    let template = PLAIN_STRING;
+
+    return template;
+  }
+
+  simulatePerNumberOfTimes() {
+    this.cars.forEach((car) => {
+      if (CarGameUtil.isForward()) {
+        car.setCountTemplatePlusOne();
+        car.setCountPlusOne();
+      }
+    });
+  }
+
+  makeTemplate(number) {
+    let template = PLAIN_STRING;
+    for (let i = 0; i < number; i++) {
+      this.simulatePerNumberOfTimes();
+      // simulate 이후 자동차를 기준으로 템플릿을 만들어 변수에 합친다.
+      template = `${template}${this.makeTemplatePerSimulate()}`;
+    }
+    return template;
+  }
+}
+class CarGame extends CarGameLogic {
   constructor() {
+    super();
     this.cars;
 
     this.initDOM();
     this.initHandler();
 
     this.formCars.addEventListener("submit", this.onFormCarsSubmit);
+    this.formCount.addEventListener("submit", this.onFormCountSubmit);
   }
   initDOM() {
     this.app = document.querySelector(DOM.APP);
@@ -59,6 +97,20 @@ class CarGame {
         this.cars = null;
         alert(e);
       }
+      return;
+    };
+    this.onFormCountSubmit = (e) => {
+      e.preventDefault();
+
+      const [{ value: stringNumber }] = e.target;
+
+      if (this.cars) {
+        this.result.innerHTML = this.makeTemplate(+stringNumber);
+        return;
+      }
+
+      alert("자동차부터 입력해주세요");
+      this.result.innerHTML = PLAIN_STRING;
       return;
     };
   }
